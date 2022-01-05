@@ -148,7 +148,7 @@ def simulate_game(candidates: list[str], popular_candidates: list[str], answer: 
 if __name__ == '__main__':
 	words_dict: dict = construct_words_json.get_dict_from_all_file()
 	popular_words_dict: dict = construct_words_json.get_dict_from_popular_file()
-	answer = 'boost'
+	answer = '' 
 	length = len(answer)
 	if length == 0:
 		length = int(input('Input the length of the word\n'))
