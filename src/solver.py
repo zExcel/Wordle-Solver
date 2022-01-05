@@ -121,7 +121,7 @@ def generate_guess_score(guess: str, answer: str) -> str:
 def simulate_game(candidates: list[str], popular_candidates: list[str], answer: str = '') -> int:
 	answer = answer.lower()
 	guesses = 0
-	while len(candidates) > 1:
+	while len(candidates) > 0:
 		guesses += 1
 		print(len(candidates))
 		candidate_values = value_candidates(candidates, popular_candidates)
@@ -133,22 +133,23 @@ def simulate_game(candidates: list[str], popular_candidates: list[str], answer: 
 				max_value = value
 				max_word = key
 		print("Best candidate: {} with a score of {}".format(max_word, max_value))
-		if (max_word == answer):
-			guesses -= 1
 		guess_score = generate_guess_score(max_word, answer)
+		if ('s' not in guess_score and 'x' not in guess_score):
+			answer = max_word
+			break
 		candidates = list(filter(lambda candidate: guess_has_similarity_to_candidate(candidate, guess_score, max_word), candidates))
 		popular_candidates = list(filter(lambda candidate: guess_has_similarity_to_candidate(candidate, guess_score, max_word), popular_candidates))
 
-	if len(candidates) == 0 or (answer != '' and candidates[0] != answer):
+	if len(candidates) == 0 or (answer != '' and answer not in candidates):
 		print("The word {} isn't present in the dictionary".format(answer))
 	else:
-		print("Answer: {} in {} guesses".format(candidates[0], guesses + 1))
-	return guesses + 1
+		print("Answer: {} in {} guesses".format(answer, guesses))
+	return guesses
 
 if __name__ == '__main__':
 	words_dict: dict = construct_words_json.get_dict_from_all_file()
 	popular_words_dict: dict = construct_words_json.get_dict_from_popular_file()
-	answer = '' 
+	answer = 'charlatans' 
 	length = len(answer)
 	if length == 0:
 		length = int(input('Input the length of the word\n'))
